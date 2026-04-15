@@ -1,0 +1,25 @@
+name: Build and Test App
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t myapp .
+
+      - name: Run container
+        run: docker run -d -p 8000:8000 myapp
+
+      - name: Wait for app
+        run: sleep 10
+
+      - name: Test with curl
+        run: curl -f http://localhost:8000
