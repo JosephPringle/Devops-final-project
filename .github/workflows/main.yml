@@ -16,10 +16,16 @@ jobs:
         run: docker build -t myapp .
 
       - name: Run container
-        run: docker run -d -p 8000:8000 myapp
+        run: docker run -d --name myapp-container -p 8000:8000 -e DJANGO_SECRET_KEY='whatever123' myapp
 
       - name: Wait for app
         run: sleep 25
+
+      - name: Show running containers
+        run: docker ps -a
+
+      - name: Show container logs
+        run: docker logs myapp-container
 
       - name: Test with curl
         run: |
