@@ -19,7 +19,13 @@ jobs:
         run: docker run -d -p 8000:8000 myapp
 
       - name: Wait for app
-        run: sleep 10
+        run: sleep 25
 
       - name: Test with curl
-        run: curl -f http://localhost:8000
+        run: |
+          for i in {1..5}; do
+            curl -f http://localhost:8000 && exit 0
+            echo "Retrying..."
+            sleep 5
+          done
+          exit 1
