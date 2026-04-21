@@ -32,4 +32,10 @@ jobs:
         run: sleep 25
 
       - name: Test with curl
-        run: curl -f http://localhost:8000
+        run: |
+          for i in {1..10}; do
+            curl -f http://localhost:8000/ && exit 0
+            echo "Waiting for app..."
+            sleep 5
+          done
+          exit 1
