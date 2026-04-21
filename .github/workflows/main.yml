@@ -8,6 +8,9 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
 
+    env:
+      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -15,23 +18,18 @@ jobs:
       - name: Build Docker image
         run: docker build -t myapp .
 
+      - name: Scan image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: myapp
+          format: table
+          exit-code: 0
+
       - name: Run container
-        run: docker run -d --name myapp-container -p 8000:8000 -e DJANGO_SECRET_KEY='whatever123' myapp
+        run: docker run -d --name myapp-container -p 8000:8000 -e DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY myapp
 
       - name: Wait for app
         run: sleep 25
 
-      - name: Show running containers
-        run: docker ps -a
-
-      - name: Show container logs
-        run: docker logs myapp-container
-
       - name: Test with curl
-        run: |
-          for i in {1..5}; do
-            curl -f http://localhost:8000 && exit 0
-            echo "Retrying..."
-            sleep 5
-          done
-          exit 1
+        run: curl -f http://localhost:8000
