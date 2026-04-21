@@ -25,4 +25,4 @@ jobs:
       - name: curl_ftw
         run: |
           sleep 10
-          curl -f http://127.0.0.1:8000/
+          curl -f "http://127.0.0.1:8000/"
