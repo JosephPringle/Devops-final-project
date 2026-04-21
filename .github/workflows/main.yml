@@ -1,57 +1,28 @@
-name: Build and Test App
+name: Build-Curl
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions: {}
 
 jobs:
-  build-test:
+  build-and-curl:
     runs-on: ubuntu-latest
-
-    env:
-      DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
-
     steps:
-      - name: Checkout code
+      - name: get_code
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t myapp .
-
-      - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: myapp
-          format: table
-          exit-code: 0
-
-      - name: Run container
+      - name: docker_build
         run: |
-          docker run -d \
-            --name myapp-container \
-            -p 8000:8000 \
-            -e DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} \
-            -e DEBUG=True \
-            myapp
-        
-      - name: Show container logs
-        run: |
-          docker logs myapp-container
-          docker exec myapp-container python manage.py check || true
-        
-      - name: Wait for app
-        run: sleep 25
+          docker build -t pipeline-test .
 
-      - name: Test with curl
+      - name: docker_run
+        env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
-          for i in {1..10}; do
-            STATUS=$(curl -s -o response.txt -w "%{http_code}" http://localhost:8000/)
-            cat response.txt
-            echo "HTTP status: $STATUS"
-            if [ "$STATUS" = "200" ]; then
-              exit 0
-            fi
-            echo "Waiting for app..."
-            sleep 5
-          done
-          exit 1
+          docker run -d -p 8000:8000 -e DJANGO_SECRET_KEY="$DJANGO_SECRET_KEY" pipeline-test
+
+      - name: curl_ftw
+        run: |
+          sleep 10
+          curl -f http://localhost:8000/
