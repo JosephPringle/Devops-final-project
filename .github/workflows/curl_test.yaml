@@ -25,5 +25,5 @@ jobs:
 
       - name: curl_ftw
         run: |
-          curl -f "http://127.0.0.1:8000/"
+          curl -f localhost:8000/
           sleep 10
