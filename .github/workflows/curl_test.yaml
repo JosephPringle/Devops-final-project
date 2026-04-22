@@ -25,5 +25,6 @@ jobs:
 
       - name: curl_ftw
         run: |
-          curl -f localhost:8000/
           sleep 10
+          curl -f localhost:8000/
+          
