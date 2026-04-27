@@ -31,7 +31,7 @@ jobs:
       - name: Generate SBOM
         uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
         with:
-          image: my-app:latest
+          image: pipeline-test
           format: spdx-json
           output-file: sbom.spdx.json
 
@@ -39,13 +39,13 @@ jobs:
         uses: anchore/scan-action@1638637db639e0ade3258b51db49a9a137574c3e
         with:
           sbom: sbom.spdx.json
-          fail-build: false
+          fail-build: true
           severity-cutoff: critical
           output-format: table
           output-file: grype-report.txt
 
       - name: Upload scan report
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        uses: actions/upload-artifacts@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: grype-report
           path: grype-report.txt
@@ -54,5 +54,5 @@ jobs:
         uses: actions/upload-artifacts@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         with:
           name: sbom
-          path: sbom.spdx.josn
+          path: sbom.spdx.json
         
