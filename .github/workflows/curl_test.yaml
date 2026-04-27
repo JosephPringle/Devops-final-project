@@ -40,7 +40,7 @@ jobs:
         with:
           sbom: sbom.spdx.json
           fail-build: false
-          severity-cutoff: high
+          severity-cutoff: severe
           output-format: table
           output-file: grype-report.txt
 
