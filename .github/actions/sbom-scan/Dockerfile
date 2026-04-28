@@ -3,8 +3,10 @@ FROM ubuntu:24.04sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194e
 RUN apt-get update && apt-get install --no-install-recommends -y curl ca-certificates && \
     curl -sSfl https://get anchore.io/syft | sh -s -- -b /usr/local/bin && \
     curl -sSfl https://get anchore.io/grype | sudo sh -s -- -b /usr/local/bin
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 #COPY requirements.txt .
 COPY entrypoint.sh .
+RUN chmod +x /entrypoint.sh
 
-CMD ["bash", "entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
