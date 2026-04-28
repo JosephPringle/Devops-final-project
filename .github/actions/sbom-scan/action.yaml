@@ -1,10 +1,10 @@
 name: "SBOM generation and scanning"
 description: "Generate SBOM and scan for vulnerabilities"
-#author: JosephPringle
-#outputs:
-  #sbom-file:
-    #description: "The syft generated SBOM"
-    #value: ${{ steps.sbom-gen-and-scane.outputs.sbom-file }}
+author: "Joseph Pringle"
+outputs:
+  sbom-file:
+    description: "The syft generated SBOM"
+    value: ${{ steps.sbom-gen-and-scane.outputs.sbom-file }}
 runs:
   using: "docker"
   image: "Dockerfile"
