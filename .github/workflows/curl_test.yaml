@@ -69,7 +69,7 @@ jobs:
     - name: acr_login
       uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121
       with:
-        registry: acrJosephPringleacmp2400.azuerecr.io
+        registry: acrjosephpringleacmp2400.azuerecr.io
         username: ${{ secrets.ARM_CLIENT_ID }}
         password: ${{ secrets.ARM_CLIENT_SECRET }}
     - name: docker_build_tag_push
@@ -79,5 +79,5 @@ jobs:
       run: |
         docker build -t application-final .
         docker tag application-final acrJosephPringleacmp2400.azurecr.io/final
-        docker login JosephPringleacmp2400.azurecr.io --username "$ARM_CLIENT_ID" --password "$ARM_CLIENT_SECRET"
-        docker push JosephPringleacmp2400.azurecr.io/final
+        docker login josephpringleacmp2400.azurecr.io --username "$ARM_CLIENT_ID" --password "$ARM_CLIENT_SECRET"
+        docker push josephpringleacmp2400.azurecr.io/final
