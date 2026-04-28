@@ -43,3 +43,37 @@ jobs:
             name: project-sbom
             path: sbom.json
             compression-level: 0
+            
+  terraform-stage1:
+    needs: [build-and-curl,sbom-scan-and-test]
+    runs-on: ubuntu-latest
+    steps:
+    - name: get-code
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+    - name: terraform-stage-1
+      uses: ./.github/actions/terraform
+      with:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        STATE_KEY: 'josephpringle'
+        TF_STAGE: 'stage1'
+
+  build-tag-push:
+    needs: terraform-stage1
+    runs-on: ubuntu-latest
+    steps:
+    - name: get_code
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+    - name: acr_login
+      uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc5266312
+      with:
+        registry: josephpringleacmp2400.azuerecr.io
+        username: ${{ secrets.ARM_CLIENT_ID }}
+        password: ${{ secrets.ARM_CLIENT_SECRET }}
+    - name: docker_build_tag_push
+      run: |
+        docker build -t application-final .
+        docker tag application-final josephpringleacmp2400.azurecr.io/final
+        docker push josephpringleacmp2400.azurecr.io/final
