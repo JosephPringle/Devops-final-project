@@ -17,9 +17,9 @@ provider "azurerm" {
   features {}
 }
 
-resource "azurerm_container_registry" "teacher-acr" {
-  name = "acrteacheracmp2400"
-  resource_group_name = "rg-teacher"
+resource "azurerm_container_registry" "josephpringle-acr" {
+  name = "acrjosephpringleacmp2400"
+  resource_group_name = "rg-josephpringle"
   location = "Central US"
   sku = "Basic"
   admin_enabled = false
