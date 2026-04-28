@@ -73,11 +73,8 @@ jobs:
         username: ${{ secrets.ARM_CLIENT_ID }}
         password: ${{ secrets.ARM_CLIENT_SECRET }}
     - name: docker_build_tag_push
-      env:
-        ARM_CLIENT_ID: ${{secrets.ARM_CLIENT_ID}}
-        ARM_CLIENT_SSECRET: ${{secrets.ARM_CLIENT_SECRET}}
       run: |
         docker build -t application-final .
         docker tag application-final acrjosephpringleacmp2400.azurecr.io/final
-        docker login acrjosephpringleacmp2400.azurecr.io --username "$ARM_CLIENT_ID" --password "$ARM_CLIENT_SECRET"
+        #docker login acrjosephpringleacmp2400.azurecr.io --username "$ARM_CLIENT_ID" --password "$ARM_CLIENT_SECRET"
         docker push acrjosephpringleacmp2400.azurecr.io/final
