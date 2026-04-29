@@ -47,7 +47,7 @@ resource "azurerm_container_group" "aci-JosephPringle-acmp" {
       port     = 8000
       protocol = "TCP"
     }
-    secure_enviornment_variables {
+    secure_environment_variables {
         DJANGO_SECRET_KEY = var.DJANGO_SECRET_KEY_PROD
     }
   }
