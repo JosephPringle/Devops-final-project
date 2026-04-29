@@ -34,7 +34,7 @@ resource "azurerm_container_group" "aci-JosephPringle-acmp" {
   location            = "Central US"
   resource_group_name = "rg-JosephPringle"
   ip_address_type     = "Public"
-  dns_name_label      = "aci-JosephPringle-acmp"
+  dns_name_label      = "acmp-JosephPringle-instance"
   os_type             = "Linux"
 
   container {
